@@ -1,0 +1,4 @@
+COMPONENT_NAME,SONAR_KEY
+COMPONENT-1,io.github.kc:component-1
+COMPONENT-2,io.github.kc:component-2
+COMPONENT-3,io.github.kc:component-3

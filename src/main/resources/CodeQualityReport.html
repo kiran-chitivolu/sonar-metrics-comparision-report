@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <style>
+            td.bottom {border-bottom: 1px solid black;}
+            td.top {border-top: 1px solid black;}
+            table.center {margin-left:auto; margin-right:auto;border-collapse: collapse;}
+            tr { text-align: center; font-size: medium; background-color: lightgrey; }
+            td.header { background-color: black; text-align: center; color:white;}
+            td {padding: 3px; text-align: left; font-family:Verdana; font-weight: bold;font-size: small; border: 1px solid white; }
+            td.green { color: green; font-weight: bold;font-size: small; }
+            td.orange { color: darkorange; font-weight: bold;font-size: small; }
+            td.red { color: red; font-weight: bold;font-size: small; }
+            p.header {font-family:Verdana; font-size: xx-large; text-align: center}
+        </style>
+        <title></title>
+        <style></style>
+    </head>
+    <body>
+        <p class="header" >Code Quality Metrics ##DATE##</p>
+        <table class="center fixed">
+            <tbody>
+                <tr>
+                    <td class="header bottom" colspan="1"> Application </td>
+                    <td class="header"  colspan="4"> Sonar Violations </td>
+                    <td class="header bottom"  colspan="1"> % Code Coverage </td>
+                    <td class="header bottom"  colspan="1"> Tech Debt </td>
+                </tr>
+                <tr>
+                    <td class="header top" colspan="1"> Name </td>
+                    <td class="header"  colspan="1">Blocker</td>
+                    <td class="header"  colspan="1">Critical</td>
+                    <td class="header"  colspan="1">Major</td>
+                    <td class="header"  colspan="1">Total</td>
+                    <td class="header top"  colspan="1"> (Unit Tests) </td>
+                    <td class="header top"  colspan="1"> (Days) </td>
+                </tr>
+                ##PRIMARY##
+            </tbody>
+        </table>
+        <p></p>
+        <table class="center fixed">
+            <tbody>
+                <tr>
+                    <td class="header" colspan="20"> Legend </td>
+                    <td colspan="80"> 1. Red colour coding means one or more of the following <ul><li>degradation from previous month</li><li>code coverage less than 80%</li><li>sonar blocker and/or critical issues greater than 0 </li><li>tech debt greater than 5 days</li><li>very high, high and medium veracode issues greater than 0 </li><li>veracode score is zero which means no veracode report found for develop branch</li></ul><br/> 2. Green colour means either status quo or improvement<br/> 3. Numbers in braces () indicate difference with previous month.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p></p>
+    </body>
+</html>
