@@ -1,4 +1,4 @@
-COMPONENT_NAME,SONAR_KEY
-COMPONENT-1,io.github.kc:component-1
-COMPONENT-2,io.github.kc:component-2
-COMPONENT-3,io.github.kc:component-3
+COMPONENT_NAME,SONAR_KEY,BRANCH_NAME
+COMPONENT-1,io.github.kc:component-1,develop
+COMPONENT-2,io.github.kc:component-2,develop
+COMPONENT-3,io.github.kc:component-3,develop

@@ -24,12 +24,13 @@ public class SonarMetricsProcessor {
         this.parentDirectoryPath = configs.getProperty("parentDirectoryPath");
     }
     public void getSonarMetricsAndWriteToCSVFile() throws Exception {
-        Map<String,String> components = getComponents(ApplicationConstants.DEBUGMODE);
+        Map<String,Map<String,String>> components = getComponents(ApplicationConstants.DEBUGMODE);
         String currentMonthMetrics = "";
         for (String key: components.keySet()) {
             try {
-                String sonarKey = components.get(key);
-                Map<String,String> sonarMetrics = getSonarMetrics(sonarKey);
+                String sonarKey = components.get(key).get("sonar.key");
+                String branchName = components.get(key).get("branch.name");
+                Map<String,String> sonarMetrics = getSonarMetrics(sonarKey,branchName);
                 String minor = sonarMetrics.get("minor");
                 String major = sonarMetrics.get("major");
                 String blocker = sonarMetrics.get("blocker");
@@ -70,7 +71,7 @@ public class SonarMetricsProcessor {
     public void buildSonarHTMLReport() throws Exception {
         LocalDate currentdate = LocalDate.now();
         currentdate = currentdate.minusMonths(0);
-        Map<String, String> components =  getComponents(ApplicationConstants.DEBUGMODE);
+        Map<String, Map<String,String>> components =  getComponents(ApplicationConstants.DEBUGMODE);
         Map<String,Map<String, Double>> currentPeriodSonarMetrics = getSonarMetricsFromCSVFile(ApplicationConstants.SONARMETRICSPATH + currentdate.getMonth() + "-" + currentdate.getYear() + ".csv");
         currentdate = currentdate.minusMonths(1);
         Map<String,Map<String, Double>> previousPeriodSonarMetrics = getSonarMetricsFromCSVFile(ApplicationConstants.SONARMETRICSPATH + currentdate.getMonth() + "-" + currentdate.getYear() + ".csv");
@@ -167,16 +168,27 @@ public class SonarMetricsProcessor {
     }
 
 
-    private Map<String, String> getComponents(String forWhat) throws Exception {
-        Map<String, String> components = new TreeMap<>();
+    private Map<String, Map<String,String>> getComponents(String forWhat) throws Exception {
+        Map<String, Map<String,String>> components = new TreeMap<>();
         List<String> componentsFileLines = Arrays.asList(FileUtil.readFileContent(parentDirectoryPath + "/configs/components.csv").split("\n"));
         for(String componentsFileLine : componentsFileLines) {
-            if(! (componentsFileLine.equals("COMPONENT_NAME,SONAR_KEY") || componentsFileLine.equals(""))){
-                components.put(componentsFileLine.split(",")[0],componentsFileLine.split(",")[1]);
+            if(! (componentsFileLine.startsWith ("COMPONENT_NAME") || componentsFileLine.equals(""))){
+                Map<String, String> attributes = addAttributesToComponent(componentsFileLine.split(",")[1],componentsFileLine.split(",")[2]);
+                components.put(componentsFileLine.split(",")[0],attributes);
             }
         }
         return components;
     }
+
+    private Map<String,String> addAttributesToComponent(String sonarKey, String branchName){
+        Map<String, String> attributes = new HashMap<>();
+        attributes.put("sonar.key",sonarKey);
+        attributes.put("branch.name",branchName);
+        return attributes;
+    }
+
+
+
 
     private boolean isGreaterThanEqual(Object currentValue, Object previousValue){
         if(previousValue.toString() == ""){
@@ -244,11 +256,6 @@ public class SonarMetricsProcessor {
             comparisonObject.put("class", "red");
         }
         return comparisonObject;
-    }
-
-    private Map<String,String> getSonarMetrics(String componentKey) throws Exception {
-        String branchName = componentKey.contains("nghp-booking") ? "develop" : "develop";
-        return getSonarMetrics(componentKey,branchName);
     }
 
     private Map<String,String> getSonarMetrics(String componentKey, String branchName) throws Exception {
